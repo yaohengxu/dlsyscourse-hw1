@@ -142,20 +142,17 @@ class DivScalar(TensorOp):
 
     def compute(self, a):
         ### BEGIN YOUR SOLUTION
-        return numpy.divide(a,self.scalar)
-        raise NotImplementedError()
+        return array_api.divide(a, self.scalar)
         ### END YOUR SOLUTION
 
     def gradient(self, out_grad, node):
         ### BEGIN YOUR SOLUTION
-        return self.scalar * out_grad
-        raise NotImplementedError()
+        return out_grad * (1.0 / self.scalar)
         ### END YOUR SOLUTION
 
 
 def divide_scalar(a, scalar):
     return DivScalar(scalar)(a)
-
 
 class Transpose(TensorOp):
     def __init__(self, axes: Optional[tuple] = None):
@@ -195,7 +192,7 @@ class Reshape(TensorOp):
 
     def gradient(self, out_grad, node):
         ### BEGIN YOUR SOLUTION
-        return np.reshape(out_grad, node.inputs[0].shape)
+        return out_grad.reshape(node.inputs[0].shape)
         raise NotImplementedError()
         ### END YOUR SOLUTION
 
@@ -284,14 +281,16 @@ class Negate(TensorOp):
     def compute(self, a):
         ### BEGIN YOUR SOLUTION
         return array_api.negative(a)
-        raise NotImplementedError()
         ### END YOUR SOLUTION
 
     def gradient(self, out_grad, node):
         ### BEGIN YOUR SOLUTION
-        return array_api.negative(a)
-        raise NotImplementedError()
+        return - out_grad
         ### END YOUR SOLUTION
+
+
+def negate(a):
+    return Negate()(a)
 
 
 def negate(a):
